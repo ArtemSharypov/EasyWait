@@ -20,7 +20,7 @@ android:id="@+id/drawer">
 
         <Button
             android:id="@+id/button_notify"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:layout_marginStart="16dp"
@@ -31,7 +31,7 @@ android:id="@+id/drawer">
 
         <Button
             android:id="@+id/button_seat_next"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:layout_marginEnd="8dp"
@@ -44,7 +44,7 @@ android:id="@+id/drawer">
 
         <Button
             android:id="@+id/button_new_reservation"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:layout_marginEnd="16dp"
