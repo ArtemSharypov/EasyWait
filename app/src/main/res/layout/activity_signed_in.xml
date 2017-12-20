@@ -54,27 +54,27 @@ android:id="@+id/drawer">
             app:layout_constraintEnd_toEndOf="parent" />
 
         <TextView
-            android:id="@+id/tv_num_reservations"
+            android:id="@+id/title_reservations"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
-            android:text="# Reservations: 0"
+            android:text="# Reservations: "
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
         <TextView
-            android:id="@+id/tv_avg_wait"
+            android:id="@+id/title_avg_wait"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:text="Average Wait: 0 minutes"
+            android:text="Average Wait: "
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tv_num_reservations"
+            app:layout_constraintStart_toEndOf="@+id/title_reservations"
             app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
         <ListView
@@ -89,7 +89,27 @@ android:id="@+id/drawer">
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_num_reservations" />
+            app:layout_constraintTop_toBottomOf="@+id/title_reservations" />
+
+        <TextView
+            android:id="@+id/tv_num_reservations"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="0"
+            android:textSize="14sp"
+            app:layout_constraintStart_toEndOf="@+id/title_reservations"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
+        <TextView
+            android:id="@+id/tv_avg_wait"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="0 minutes"
+            android:textSize="14sp"
+            app:layout_constraintStart_toEndOf="@+id/title_avg_wait"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
     </android.support.constraint.ConstraintLayout>
 
