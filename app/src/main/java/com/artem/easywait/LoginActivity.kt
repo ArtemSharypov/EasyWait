@@ -15,6 +15,11 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
+        //Exit the app if necessary
+        if (intent.getBooleanExtra("EXIT", false)) {
+            finish()
+        }
+
         button_login.setOnClickListener {
            login()
         }

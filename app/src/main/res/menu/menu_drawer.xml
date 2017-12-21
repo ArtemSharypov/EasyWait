@@ -3,8 +3,13 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/options"
-            android:title="Temp Options"
+            android:id="@+id/settings"
+            android:title="Settings"
+            android:checked="false"/>
+
+        <item
+            android:id="@+id/sign_out"
+            android:title="Sign Out"
             android:checked="false"/>
     </group>
 </menu>
