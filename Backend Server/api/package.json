@@ -9,6 +9,7 @@
   "author": "Artem Sharypov",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.16.2"
+    "express": "^4.16.2",
+    "twilio": "^3.11.0"
   }
 }
