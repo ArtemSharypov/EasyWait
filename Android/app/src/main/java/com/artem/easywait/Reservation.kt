@@ -1,7 +1,6 @@
 package com.artem.easywait
 
 import java.util.*
-import kotlin.collections.HashMap
 
 class Reservation {
 
@@ -29,5 +28,4 @@ class Reservation {
         arrivalTimeHours = 0
         arrivalTimeMinutes = 0
     }
-
 }

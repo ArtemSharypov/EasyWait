@@ -30,6 +30,8 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+
+
     //Tries to use the email and password provided to sign into firebase
     fun login(){
         var snackBar = Snackbar.make(button_login, "Authenticating...", Snackbar.LENGTH_INDEFINITE)

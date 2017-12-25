@@ -92,9 +92,9 @@ class ListViewAdapter : BaseAdapter {
     }
 
 
-    fun updateReservations() {
+    private fun updateReservations() {
         val reservationsListener = object : ValueEventListener{
-            override fun onDataChange(dataSnapShot: DataSnapshot) {
+            override fun onDataChange(dataSnapShot: DataSnapshot?) {
                 reservations.clear()
 
                 for(postSnapShot in dataSnapShot!!.children) {
@@ -106,7 +106,7 @@ class ListViewAdapter : BaseAdapter {
                 notifyDataSetChanged()
             }
 
-            override fun onCancelled(databaseError: DatabaseError) {
+            override fun onCancelled(databaseError: DatabaseError?) {
                 println("loadPost:onCancelled ${databaseError!!.toException()}")
             }
         }
@@ -131,7 +131,7 @@ class ListViewAdapter : BaseAdapter {
 
         if(convertView == null) {
             view = inflater.inflate(R.layout.listview_row_reservation, parent, false)
-        } else {
+        }else {
             view = convertView
         }
 
