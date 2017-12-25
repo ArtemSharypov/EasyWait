@@ -2,6 +2,7 @@ package com.artem.easywait
 
 import android.app.AlertDialog
 import android.content.Context
+import android.os.AsyncTask
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,13 +12,17 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import kotlinx.android.synthetic.main.dialog_new_reservation.view.*
+import kotlinx.android.synthetic.main.dialog_edit_reservation.view.*
 import kotlinx.android.synthetic.main.listview_row_reservation.view.*
+import java.io.BufferedWriter
+import java.io.IOException
+import java.io.OutputStreamWriter
+import java.net.HttpURLConnection
+import java.net.URL
+import java.net.URLEncoder
 import java.util.*
 
-/**
- * Created by Artem on 2017-12-19.
- */
+
 class ListViewAdapter : BaseAdapter {
 
     private var inflater: LayoutInflater
@@ -37,24 +42,76 @@ class ListViewAdapter : BaseAdapter {
         updateReservations()
     }
 
+    inner class SendMessageTask: AsyncTask<String, Void, String>() {
+        //Expected input arguments are: phoneNumber, messageToSend
+        override fun doInBackground(vararg args: String?): String {
+            //call the api and such
+
+            var result = ""
+            var postData = ""
+
+            if(args.size >= 2){
+                var phoneNumText = URLEncoder.encode("phoneNumber", "UTF-8")
+                var actualPhoneNum = URLEncoder.encode(args[0].toString(), "UTF-8")
+
+                var messageKey = URLEncoder.encode("message", "UTF-8")
+                var actualMessage = URLEncoder.encode(args[1].toString(), "UTF-8")
+
+                postData = phoneNumText + "=" + actualPhoneNum + "&" + messageKey + "=" + actualMessage
+            }
+
+            try {
+                var server = "temp"
+                var url = URL("http://" + server + "/messages") //Needs the proper server still
+                var connection = url.openConnection() as HttpURLConnection
+
+                connection.readTimeout = 10000
+                connection.connectTimeout = 15000
+                connection.requestMethod = "POST"
+                connection.doInput = true
+                connection.doOutput = true
+
+                var bufferedWriter = BufferedWriter(OutputStreamWriter(connection.outputStream, "UTF-8"))
+                bufferedWriter.write(postData)
+                bufferedWriter.flush()
+                bufferedWriter.close()
+
+                connection.connect()
+                result = connection.responseCode.toString()
+
+            } catch(e: IOException) {
+                e.printStackTrace()
+            }
+
+            return result
+        }
+
+        override fun onPostExecute(result: String?) {
+            super.onPostExecute(result)
+        }
+    }
+
+
     fun updateReservations() {
         val reservationsListener = object : ValueEventListener{
             override fun onDataChange(dataSnapShot: DataSnapshot) {
                 reservations.clear()
 
-                dataSnapShot.children.mapNotNullTo(reservations) {
-                    it.getValue<Reservation>(Reservation::class.java)
+                for(postSnapShot in dataSnapShot!!.children) {
+                    var reservation = postSnapShot.getValue(Reservation::class.java)
+                    reservations.add(reservation!!)
                 }
 
                 tvNumReservations.text = reservations.size.toString()
+                notifyDataSetChanged()
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
-                println("loadPost:onCancelled ${databaseError.toException()}")
+                println("loadPost:onCancelled ${databaseError!!.toException()}")
             }
         }
 
-        database.child("users").child(userID).addValueEventListener(reservationsListener)
+        database.child("users").child(userID).child("reservations").addValueEventListener(reservationsListener)
     }
 
     override fun getCount(): Int {
@@ -69,14 +126,16 @@ class ListViewAdapter : BaseAdapter {
         return position.toLong()
     }
 
-    override fun getView(position: Int, convertView: View, parent: ViewGroup?): View {
-        var view: View = convertView
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+        var view: View
 
-        if(view == null) {
+        if(convertView == null) {
             view = inflater.inflate(R.layout.listview_row_reservation, parent, false)
+        } else {
+            view = convertView
         }
 
-        var currReserv: Reservation = reservations.get(position)
+        var currReserv: Reservation = reservations[position]
 
         var calendar = GregorianCalendar()
         var currHour: Int = calendar.get(Calendar.HOUR)
@@ -85,7 +144,7 @@ class ListViewAdapter : BaseAdapter {
 
         var waitTime: Int = timeInMinutes - currReserv.arrivalTimeMinutes - currReserv.arrivalTimeHours*60
 
-        view.tv_pos.text = position.toString()
+        view.tv_pos.text = (position + 1).toString() //+1 to offset the position starting at 0
         view.tv_name.text = currReserv.name
         view.tv_wait_time.text = waitTime.toString()
         view.tv_num_people.text = currReserv.numPeople.toString()
@@ -108,8 +167,9 @@ class ListViewAdapter : BaseAdapter {
     //Notifies the next customer via SMS (If they have a phone number added)
     fun notifyReservation(pos: Int){
         var reservation: Reservation = reservations[pos]
+        var message = "Hi, your table is ready." //Temp message that will be changed later
 
-        //todo grab info from reservation, and send the api request
+        SendMessageTask().execute(reservation.number, message)
     }
 
     //Dialog popup to allow the ability to edit the specified reservation
@@ -117,6 +177,12 @@ class ListViewAdapter : BaseAdapter {
     fun editReservation(pos: Int){
         var reservation: Reservation = reservations[pos]
         var promptsView = inflater.inflate(R.layout.dialog_edit_reservation, null)
+
+        //Sets the current information about the reservation for the dialog
+        promptsView.input_name.setText(reservation.name)
+        promptsView.input_num_people.setText(reservation.numPeople.toString())
+        promptsView.input_number.setText(reservation.number)
+
         var alertDialogBuilder = AlertDialog.Builder(context)
         alertDialogBuilder.setView(promptsView)
 
@@ -155,6 +221,8 @@ class ListViewAdapter : BaseAdapter {
         }
     }
 
+    //Creates a new reservation with the specified parameters, adds it to the list, and updates
+    //the listview and the DB
     fun createReservation(name: String, number: String, numPeople: Int){
         var reservation = Reservation(name, number, numPeople)
         reservations.add(reservation)

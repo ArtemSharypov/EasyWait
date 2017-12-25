@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.dialog_new_reservation.view.*
 import kotlinx.android.synthetic.main.fragment_reservations_display.*
+import kotlinx.android.synthetic.main.fragment_reservations_display.view.*
 
 /**
  * Created by Artem on 2017-12-21.
@@ -21,20 +22,20 @@ class ReservationsDisplayFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         var view = inflater!!.inflate(R.layout.fragment_reservations_display, container, false)
 
-        button_notify.setOnClickListener {
+        view.button_notify.setOnClickListener {
             notifyNextCustomer()
         }
 
-        button_seat_next.setOnClickListener {
+        view.button_seat_next.setOnClickListener {
             seatNextCustomer()
         }
 
-        button_new_reservation.setOnClickListener {
+        view.button_new_reservation.setOnClickListener {
             createNewReservation()
         }
 
-        adapter =  ListViewAdapter(context, reservations, fbAuth.currentUser!!.uid, tv_num_reservations)
-        list_reservations.adapter = adapter
+        adapter = ListViewAdapter(context, reservations, fbAuth.currentUser!!.uid, view.tv_num_reservations)
+        view.list_reservations.adapter = adapter
 
         return view
     }
