@@ -2,6 +2,7 @@ package com.artem.easywait
 
 import android.app.AlertDialog
 import android.content.Context
+import android.os.AsyncTask
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +14,12 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.dialog_edit_reservation.view.*
 import kotlinx.android.synthetic.main.listview_row_reservation.view.*
+import java.io.BufferedWriter
+import java.io.IOException
+import java.io.OutputStreamWriter
+import java.net.HttpURLConnection
+import java.net.URL
+import java.net.URLEncoder
 import java.util.*
 
 
@@ -34,6 +41,56 @@ class ListViewAdapter : BaseAdapter {
 
         updateReservations()
     }
+
+    inner class SendMessageTask: AsyncTask<String, Void, String>() {
+        //Expected input arguments are: phoneNumber, messageToSend
+        override fun doInBackground(vararg args: String?): String {
+            //call the api and such
+
+            var result = ""
+            var postData = ""
+
+            if(args.size >= 2){
+                var phoneNumText = URLEncoder.encode("phoneNumber", "UTF-8")
+                var actualPhoneNum = URLEncoder.encode(args[0].toString(), "UTF-8")
+
+                var messageKey = URLEncoder.encode("message", "UTF-8")
+                var actualMessage = URLEncoder.encode(args[1].toString(), "UTF-8")
+
+                postData = phoneNumText + "=" + actualPhoneNum + "&" + messageKey + "=" + actualMessage
+            }
+
+            try {
+                var server = "temp"
+                var url = URL("http://" + server + "/messages") //Needs the proper server still
+                var connection = url.openConnection() as HttpURLConnection
+
+                connection.readTimeout = 10000
+                connection.connectTimeout = 15000
+                connection.requestMethod = "POST"
+                connection.doInput = true
+                connection.doOutput = true
+
+                var bufferedWriter = BufferedWriter(OutputStreamWriter(connection.outputStream, "UTF-8"))
+                bufferedWriter.write(postData)
+                bufferedWriter.flush()
+                bufferedWriter.close()
+
+                connection.connect()
+                result = connection.responseCode.toString()
+
+            } catch(e: IOException) {
+                e.printStackTrace()
+            }
+
+            return result
+        }
+
+        override fun onPostExecute(result: String?) {
+            super.onPostExecute(result)
+        }
+    }
+
 
     private fun updateReservations() {
         val reservationsListener = object : ValueEventListener{
@@ -110,8 +167,9 @@ class ListViewAdapter : BaseAdapter {
     //Notifies the next customer via SMS (If they have a phone number added)
     fun notifyReservation(pos: Int){
         var reservation: Reservation = reservations[pos]
+        var message = "Hi, your table is ready." //Temp message that will be changed later
 
-        //todo grab info from reservation, and send the api request
+        SendMessageTask().execute(reservation.number, message)
     }
 
     //Dialog popup to allow the ability to edit the specified reservation

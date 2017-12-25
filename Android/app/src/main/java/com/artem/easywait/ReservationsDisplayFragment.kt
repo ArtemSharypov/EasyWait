@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.dialog_new_reservation.view.*
+import kotlinx.android.synthetic.main.fragment_reservations_display.*
 import kotlinx.android.synthetic.main.fragment_reservations_display.view.*
 
 /**
@@ -33,7 +34,7 @@ class ReservationsDisplayFragment : Fragment() {
             createNewReservation()
         }
 
-        adapter =  ListViewAdapter(context, reservations, fbAuth.currentUser!!.uid, view.tv_num_reservations)
+        adapter = ListViewAdapter(context, reservations, fbAuth.currentUser!!.uid, view.tv_num_reservations)
         view.list_reservations.adapter = adapter
 
         return view

@@ -38,8 +38,8 @@ class LoginActivity : AppCompatActivity() {
         snackBar.setAction("Action", null)
         snackBar.setAction("dismiss", object : View.OnClickListener {
                     override fun onClick(p0: View?) {
-                        snackBar.dismiss()
-                    }
+                            snackBar.dismiss()
+                        }
                 })
         snackBar.show()
 
