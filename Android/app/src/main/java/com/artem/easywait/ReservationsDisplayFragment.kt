@@ -8,12 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.dialog_new_reservation.view.*
-import kotlinx.android.synthetic.main.fragment_reservations_display.*
 import kotlinx.android.synthetic.main.fragment_reservations_display.view.*
 
-/**
- * Created by Artem on 2017-12-21.
- */
 class ReservationsDisplayFragment : Fragment() {
     private var fbAuth = FirebaseAuth.getInstance()
     private var reservations: MutableList<Reservation> = mutableListOf()

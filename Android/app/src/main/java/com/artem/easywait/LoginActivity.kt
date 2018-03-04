@@ -21,6 +21,12 @@ class LoginActivity : AppCompatActivity() {
             finish()
         }
 
+        //If the user is logged in, then switch skip the rest
+        if(fbAuth.currentUser != null) {
+            var intent = Intent(this, SignedInActivity::class.java)
+            startActivity(intent)
+        }
+
         button_login.setOnClickListener {
            login()
         }
@@ -51,7 +57,6 @@ class LoginActivity : AppCompatActivity() {
                         snackBar.dismiss()
 
                         var intent = Intent(this, SignedInActivity::class.java)
-                        intent.putExtra("id", fbAuth.currentUser?.email)
                         startActivity(intent)
 
                     } else {
