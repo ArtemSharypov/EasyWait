@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_signed_in.*
@@ -18,26 +20,6 @@ class SignedInActivity : AppCompatActivity() {
         setContentView(R.layout.activity_signed_in)
 
         setSupportActionBar(toolbar)
-
-        nav_view.setNavigationItemSelectedListener {
-            selectDrawerItem(it.itemId)
-            true
-        }
-
-        val actionBarDrawerToggle = object: ActionBarDrawerToggle(this, drawer, toolbar, R.string.drawer_open, R.string.drawer_close) {
-            override fun onDrawerClosed(drawerView: View?) {
-                super.onDrawerClosed(drawerView)
-                invalidateOptionsMenu()
-            }
-
-            override fun onDrawerOpened(drawerView: View?) {
-                super.onDrawerOpened(drawerView)
-                invalidateOptionsMenu()
-            }
-        }
-
-        drawer.addDrawerListener(actionBarDrawerToggle)
-        actionBarDrawerToggle.syncState()
 
         fbAuth.addAuthStateListener {
             if(fbAuth.currentUser == null){
@@ -53,17 +35,28 @@ class SignedInActivity : AppCompatActivity() {
 
     }
 
-    //Selects the specified item in the navigation drawer
-    private fun selectDrawerItem(itemId: Int){
-        when(itemId) {
-            R.id.settings ->
-                    switchToSettings()
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_signedin, menu)
+        return true
+    }
 
-            R.id.sign_out ->
-                    signOut()
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        var selected = super.onOptionsItemSelected(item)
+        var id = item?.itemId
+
+        when(id) {
+            R.id.action_settings -> {
+                selected = true
+                switchToSettings()
+            }
+
+            R.id.action_sign_out-> {
+                selected = true
+                signOut()
+            }
         }
 
-        drawer.closeDrawers()
+        return selected
     }
 
     //Signs out the current user from Firebase
