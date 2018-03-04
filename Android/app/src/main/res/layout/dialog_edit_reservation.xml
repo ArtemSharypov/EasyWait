@@ -2,7 +2,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:theme="@style/BackgroundStyle">
 
 
     <TextView
@@ -10,16 +11,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:text="Name"
+        android:text="@string/name"
+        android:theme="@style/TextViewStyle"
         app:layout_constraintBottom_toTopOf="@+id/input_name"
         app:layout_constraintStart_toStartOf="@+id/input_name" />
 
     <EditText
         android:id="@+id/input_name"
-        android:layout_width="wrap_content"
+        style="@style/EditTextStyle"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginEnd="64dp"
+        android:layout_marginStart="64dp"
         android:layout_marginTop="76dp"
         android:ems="10"
         android:inputType="textPersonName"
@@ -32,36 +35,46 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:text="Phone Number"
+        android:theme="@style/TextViewStyle"
+        android:text="@string/phone_number"
         app:layout_constraintBottom_toTopOf="@+id/input_number"
         app:layout_constraintStart_toStartOf="@+id/input_number" />
 
     <EditText
         android:id="@+id/input_number"
-        android:layout_width="wrap_content"
-        android:layout_height="49dp"
+        style="@style/EditTextStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="64dp"
+        android:layout_marginStart="64dp"
         android:layout_marginTop="64dp"
         android:ems="10"
-        android:inputType="textPersonName"
-        app:layout_constraintStart_toStartOf="@+id/input_name"
+        android:inputType="phone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/input_name" />
 
     <EditText
         android:id="@+id/input_num_people"
-        android:layout_width="wrap_content"
+        style="@style/EditTextStyle"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="64dp"
+        android:layout_marginStart="64dp"
         android:layout_marginTop="64dp"
         android:ems="10"
-        android:inputType="textPersonName"
-        app:layout_constraintStart_toStartOf="@+id/input_number"
+        android:inputType="number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/input_number" />
 
     <TextView
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
-        android:layout_height="22dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:text="Number of People"
+        android:text="@string/num_people"
+        android:theme="@style/TextViewStyle"
         app:layout_constraintBottom_toTopOf="@+id/input_num_people"
         app:layout_constraintStart_toStartOf="@+id/input_num_people" />
 
