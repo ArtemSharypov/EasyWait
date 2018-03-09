@@ -74,10 +74,7 @@ class SignedInActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if(drawer.isDrawerOpen(GravityCompat.START))
-        {
-            drawer.closeDrawer(GravityCompat.START)
-        } else if(supportFragmentManager.backStackEntryCount > 0) {
+       if(supportFragmentManager.backStackEntryCount > 0) {
             super.onBackPressed()
         } else {
             //todo: create confirmation if user wants to exit
